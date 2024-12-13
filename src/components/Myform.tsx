@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import axios from "axios";
@@ -31,7 +32,6 @@ const Myform = () => {
   const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
   const postData = () => {
-    const newId = id + 1;
     // const dateAdded = ;
     setDateT(new Date());
     toast("Data has been added", {
@@ -42,7 +42,7 @@ const Myform = () => {
       },
     });
     axios.post(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData`, {
-      id: newId,
+      id: setId(id + 1),
       firstName,
       lastName,
       email,
@@ -76,6 +76,7 @@ const Myform = () => {
 
   const handleEdit = (id: number) => {
     const dt = APIData.filter((item) => item.id === id);
+    console.log(dt);
     setFirstName(dt[0].firstName);
     setLastName(dt[0].lastName);
     setEmail(dt[0].email);
@@ -92,6 +93,7 @@ const Myform = () => {
         })
         .then(() => {});
     };
+    console.log(updateAPIData);
   };
   const handleDelete = (id: number): void => {
     if (id > 0) {
@@ -105,6 +107,10 @@ const Myform = () => {
               }
             );
             setAPIData(APIData.filter((item) => item.id !== id));
+
+            // .then((res) => res.text())
+            // .then((res) => console.log(res));
+            console.log(typeof response);
 
             // setAPIData(response);
           } catch (error) {
