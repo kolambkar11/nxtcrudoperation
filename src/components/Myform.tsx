@@ -20,7 +20,7 @@ type resultProps = {
   firstName: string;
   lastName: string;
   email: string;
-  dateAdded: string;
+  dateAdded: any;
 };
 const Myform = () => {
   const [firstName, setFirstName] = useState("");
@@ -31,10 +31,10 @@ const Myform = () => {
   const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
   const postData = () => {
-    const dateAdded = new Date();
-    setDateT(dateT);
+    // const dateAdded = ;
+    setDateT(new Date());
     toast("Data has been added", {
-      description: "Added at: " + dateAdded,
+      description: "Added at: " + dateT,
       action: {
         label: "Thanks",
         onClick: () => console.log("Undo"),
@@ -82,6 +82,18 @@ const Myform = () => {
     setIsUpdate(true);
   };
 
+  const handleUpdate = (e: any) => {
+    const updateAPIData = () => {
+      axios
+        .put(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/${id}`, {
+          firstName,
+          lastName,
+          email,
+        })
+        .then(() => {});
+    };
+    console.log(updateAPIData);
+  };
   const handleDelete = (id: number) => {
     if (id > 0) {
       if (window.confirm("Are you sure you want to delete this data?")) {
@@ -101,9 +113,9 @@ const Myform = () => {
           }
         };
         fetchApi();
-        const dateAdded = new Date();
+
         toast("Data has been deleted", {
-          description: "Added at: " + dateAdded,
+          description: "Added at: " + dateT,
           action: {
             label: "Thanks",
             onClick: () => console.log("Undo"),
@@ -152,6 +164,9 @@ const Myform = () => {
               <Button
                 className="bg-green-400 text-black hover:text-white"
                 type="button"
+                onClick={(e: any) => {
+                  handleUpdate(e);
+                }}
               >
                 Update Data
               </Button>
@@ -175,7 +190,7 @@ const Myform = () => {
         <TableBody>
           {APIData ? (
             APIData.map((data, index) => (
-              <TableRow key={index}>
+              <TableRow key={data.id}>
                 <TableCell className="text-center">{data.id}</TableCell>
                 <TableCell className="text-center">{data.firstName}</TableCell>
                 <TableCell className="text-center">{data.lastName}</TableCell>
