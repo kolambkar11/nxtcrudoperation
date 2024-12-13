@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import { string } from "zod";
 
 type resultProps = {
   id: number;
@@ -100,7 +99,7 @@ const Myform = () => {
       if (window.confirm("Are you sure you want to delete this data?")) {
         const fetchApi = async () => {
           try {
-            const response: any = await fetch(
+            const response = await fetch(
               "https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/" + id,
               {
                 method: "DELETE",
@@ -167,9 +166,7 @@ const Myform = () => {
               <Button
                 className="bg-green-400 text-black hover:text-white"
                 type="button"
-                onClick={() => {
-                  handleUpdate;
-                }}
+                onClick={handleUpdate}
               >
                 Update Data
               </Button>
