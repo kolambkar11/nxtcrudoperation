@@ -1,6 +1,7 @@
 import Create from "@/components/Create";
 import Read from "@/components/Read";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Toaster } from "sonner";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       </h2>
       <Create />
       <Read />
+      <Toaster />
     </div>
   );
 }
