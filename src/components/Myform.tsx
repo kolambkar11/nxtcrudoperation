@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import { Pencil, Trash2 } from "lucide-react";
+import { string } from "zod";
 
 type resultProps = {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  dateAdded: any;
+  dateAdded: string | number;
 };
 const Myform = () => {
   const [firstName, setFirstName] = useState("");
@@ -82,7 +83,7 @@ const Myform = () => {
     setIsUpdate(true);
   };
 
-  const handleUpdate = (e: any) => {
+  const handleUpdate = () => {
     const updateAPIData = () => {
       axios
         .put(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/${id}`, {
@@ -94,7 +95,7 @@ const Myform = () => {
     };
     console.log(updateAPIData);
   };
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number): void => {
     if (id > 0) {
       if (window.confirm("Are you sure you want to delete this data?")) {
         const fetchApi = async () => {
@@ -107,6 +108,8 @@ const Myform = () => {
             )
               .then((res) => res.text())
               .then((res) => console.log(res));
+            console.log(typeof response);
+
             setAPIData(response);
           } catch (error) {
             console.error("Failed to delete data:", error);
@@ -164,8 +167,8 @@ const Myform = () => {
               <Button
                 className="bg-green-400 text-black hover:text-white"
                 type="button"
-                onClick={(e: any) => {
-                  handleUpdate(e);
+                onClick={() => {
+                  handleUpdate;
                 }}
               >
                 Update Data
@@ -189,7 +192,7 @@ const Myform = () => {
         </TableHeader>
         <TableBody>
           {APIData ? (
-            APIData.map((data, index) => (
+            APIData.map((data) => (
               <TableRow key={data.id}>
                 <TableCell className="text-center">{data.id}</TableCell>
                 <TableCell className="text-center">{data.firstName}</TableCell>
