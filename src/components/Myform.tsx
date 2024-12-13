@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import axios from "axios";
 import { toast } from "sonner";
@@ -41,7 +41,7 @@ const Myform = () => {
       },
     });
     axios.post(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData`, {
-      id: id + 1,
+      id: setId(id + 1),
       firstName,
       lastName,
       email,
