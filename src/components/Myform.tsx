@@ -101,6 +101,14 @@ const Myform = () => {
           }
         };
         fetchApi();
+        const dateAdded = new Date();
+        toast("Data has been deleted", {
+          description: "Added at: " + dateAdded,
+          action: {
+            label: "Thanks",
+            onClick: () => console.log("Undo"),
+          },
+        });
       }
     }
   };
