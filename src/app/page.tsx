@@ -1,6 +1,4 @@
-import Create from "@/components/Create";
-import Read from "@/components/Read";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import Myform from "@/components/Myform";
 import { Toaster } from "sonner";
 
 export default function Home() {
@@ -9,8 +7,7 @@ export default function Home() {
       <h2 className="main-header text-center text-2xl font-bold">
         React Crud Operations
       </h2>
-      <Create />
-      <Read />
+      <Myform />
       <Toaster />
     </div>
   );
