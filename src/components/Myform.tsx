@@ -31,6 +31,7 @@ const Myform = () => {
   const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
   const postData = () => {
+    const newId = id + 1;
     // const dateAdded = ;
     setDateT(new Date());
     toast("Data has been added", {
@@ -41,7 +42,7 @@ const Myform = () => {
       },
     });
     axios.post(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData`, {
-      id: setId(id + 1),
+      id: newId,
       firstName,
       lastName,
       email,
@@ -75,7 +76,6 @@ const Myform = () => {
 
   const handleEdit = (id: number) => {
     const dt = APIData.filter((item) => item.id === id);
-    console.log(dt);
     setFirstName(dt[0].firstName);
     setLastName(dt[0].lastName);
     setEmail(dt[0].email);
@@ -92,7 +92,6 @@ const Myform = () => {
         })
         .then(() => {});
     };
-    console.log(updateAPIData);
   };
   const handleDelete = (id: number): void => {
     if (id > 0) {
@@ -104,12 +103,10 @@ const Myform = () => {
               {
                 method: "DELETE",
               }
-            )
-              .then((res) => res.text())
-              .then((res) => console.log(res));
-            console.log(typeof response);
+            );
+            setAPIData(APIData.filter((item) => item.id !== id));
 
-            setAPIData(response);
+            // setAPIData(response);
           } catch (error) {
             console.error("Failed to delete data:", error);
           }
