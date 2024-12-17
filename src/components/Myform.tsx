@@ -32,26 +32,6 @@ const Myform = () => {
   const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
 
-  const getData = async () => {
-    try {
-      const response = await fetch(
-        "https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData",
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const jsonData = await response.json();
-      setAPIData(jsonData);
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
-  };
-
   const postData = async () => {
     const newDate = new Date();
     try {
@@ -160,7 +140,7 @@ const Myform = () => {
           }
         };
         fetchApi();
-
+        setDateT(new Date());
         toast("Data has been deleted", {
           description: "Added at: " + dateT,
           action: {
