@@ -31,23 +31,50 @@ const Myform = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
-  const postData = () => {
-    // const dateAdded = ;
-    setDateT(new Date());
-    toast("Data has been added", {
-      description: "Added at: " + dateT,
-      action: {
-        label: "Thanks",
-        onClick: () => console.log("Undo"),
-      },
-    });
-    axios.post(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData`, {
-      id: setId(id + 1),
-      firstName,
-      lastName,
-      email,
-      dateAdded: dateT,
-    });
+
+  const getData = async () => {
+    try {
+      const response = await fetch(
+        "https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData",
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const jsonData = await response.json();
+      setAPIData(jsonData);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
+
+  const postData = async () => {
+    const newDate = new Date();
+    try {
+      const response = await axios.post(
+        `https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData`,
+        {
+          id: id, // Use current state of id
+          firstName,
+          lastName,
+          email,
+          dateAdded: newDate.toISOString(), // Format date properly
+        }
+      );
+      toast.success("Data has been added!");
+      setId(id + 1); // Increment id after successful post
+      setAPIData((prev) => [...prev, response.data]); // Update UI locally
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+    } catch (error) {
+      toast.error("Failed to add data");
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -77,24 +104,39 @@ const Myform = () => {
   const handleEdit = (id: number) => {
     const dt = APIData.filter((item) => item.id === id);
     console.log(dt);
+    setId(dt[0].id);
     setFirstName(dt[0].firstName);
     setLastName(dt[0].lastName);
     setEmail(dt[0].email);
     setIsUpdate(true);
   };
 
-  const handleUpdate = () => {
-    const updateAPIData = () => {
-      axios
-        .put(`https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/${id}`, {
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/${id}`,
+        {
+          id,
           firstName,
           lastName,
           email,
-        })
-        .then(() => {});
-    };
-    console.log(updateAPIData);
+          dateAdded: new Date().toISOString(), // Update with current date
+        }
+      );
+      toast.success("Data has been updated!");
+      setAPIData((prev) =>
+        prev.map((item) => (item.id === id ? response.data : item))
+      ); // Update UI locally
+      setIsUpdate(false);
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+    } catch (error) {
+      toast.error("Failed to update data");
+      console.error(error);
+    }
   };
+
   const handleDelete = (id: number): void => {
     if (id > 0) {
       if (window.confirm("Are you sure you want to delete this data?")) {
