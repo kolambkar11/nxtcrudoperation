@@ -29,7 +29,6 @@ const Myform = () => {
   const [email, setEmail] = useState("");
   const [id, setId] = useState(1);
   const [isUpdate, setIsUpdate] = useState(false);
-  const [dateT, setDateT] = useState(new Date());
   const [APIData, setAPIData] = useState<resultProps[]>([]);
 
   const postData = async () => {
@@ -117,37 +116,17 @@ const Myform = () => {
     }
   };
 
-  const handleDelete = (id: number): void => {
-    if (id > 0) {
-      if (window.confirm("Are you sure you want to delete this data?")) {
-        const fetchApi = async () => {
-          try {
-            const response = await fetch(
-              "https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/" + id,
-              {
-                method: "DELETE",
-              }
-            );
-            setAPIData(APIData.filter((item) => item.id !== id));
-
-            // .then((res) => res.text())
-            // .then((res) => console.log(res));
-            console.log(typeof response);
-
-            // setAPIData(response);
-          } catch (error) {
-            console.error("Failed to delete data:", error);
-          }
-        };
-        fetchApi();
-        setDateT(new Date());
-        toast("Data has been deleted", {
-          description: "Added at: " + dateT,
-          action: {
-            label: "Thanks",
-            onClick: () => console.log("Undo"),
-          },
-        });
+  const handleDelete = async (id: number): Promise<void> => {
+    if (window.confirm("Are you sure you want to delete this data?")) {
+      try {
+        await axios.delete(
+          `https://675bc38f9ce247eb19374d66.mockapi.io/nco/fakeData/${id}`
+        );
+        toast.success("Data has been deleted!");
+        setAPIData((prev) => prev.filter((item) => item.id !== id)); // Update UI locally
+      } catch (error) {
+        toast.error("Failed to delete data");
+        console.error(error);
       }
     }
   };
